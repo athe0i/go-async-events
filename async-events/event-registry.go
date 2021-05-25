@@ -6,7 +6,7 @@ import (
 
 type EventRegistry interface {
 	RegisterEvent(name string, c EventConstructor)
-	CreateEvent(name string, payload map[string]interface{}, callbackChannel string) (e Event, err error)
+	CreateEvent(name string, payload map[string]interface{}) (e Event, err error)
 	GetName(ev Event) (name string, err error)
 }
 
@@ -29,7 +29,7 @@ func (etr *EventConstructorRegistry) RegisterEvent(name string, constructor Even
 	etr.typeMap[reflect.TypeOf(constructor())] = name
 }
 
-func (etr *EventConstructorRegistry) CreateEvent(name string, payload map[string]interface{}, callbackChannel string) (e Event, err error) {
+func (etr *EventConstructorRegistry) CreateEvent(name string, payload map[string]interface{}) (e Event, err error) {
 	var constructor EventConstructor
 	constructor, ok := etr.constructorMap[name]
 	if ok == false {
@@ -39,7 +39,6 @@ func (etr *EventConstructorRegistry) CreateEvent(name string, payload map[string
 	ev := constructor()
 
 	ev.SetName(name)
-	ev.SetCallbackChannel(callbackChannel)
 	err = ev.ParsePayload(payload)
 
 	return ev, err

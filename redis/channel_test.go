@@ -28,7 +28,7 @@ func TestRedisChannel_Push(t *testing.T) {
 		t.Errorf("Failed to fetch events: " + err.Error())
 	}
 
-	testPayload := "{\"callback_channel\":\"\",\"name\":\"test\",\"payload\":{\"Number\":124,\"Text\":\"Test\",\"SubField\":{\"Field\":\"SubField\"}}}"
+	testPayload := "{\"name\":\"test\",\"payload\":{\"Number\":124,\"Text\":\"Test\",\"SubField\":{\"Field\":\"SubField\"}}}"
 	if lastEvent[0] != testPayload {
 		t.Errorf("Latest event has incorrect payload!\nActual:" + lastEvent[0] + "\nExpected" + testPayload)
 		return
@@ -77,7 +77,6 @@ func GetTestEvent() async_events.Event {
 		},
 	}
 	e.SetName("test")
-	e.SetCallbackChannel("")
 
 	return &e
 }

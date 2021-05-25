@@ -7,7 +7,6 @@ import (
 
 const NameField = "name"
 const PayloadField = "payload"
-const CallbackChannelField = "callback_channel"
 
 type JsonSerializer struct {
 	async_events.EventRegistry
@@ -26,7 +25,6 @@ func (serializer *JsonSerializer) Serialize(ev async_events.Event) (string, erro
 	preserializedEvent := map[string]interface{}{
 		NameField:            evName,
 		PayloadField:         ev.GetPayload(),
-		CallbackChannelField: ev.GetCallbackChannel(),
 	}
 	valByte, err := json.Marshal(preserializedEvent)
 
@@ -43,8 +41,7 @@ func (serializer *JsonSerializer) Deserialize(jsonEvent string) (event async_eve
 
 	e, err := serializer.CreateEvent(
 		unmarshalled[NameField].(string),
-		unmarshalled[PayloadField].(map[string]interface{}),
-		unmarshalled[CallbackChannelField].(string))
+		unmarshalled[PayloadField].(map[string]interface{}))
 
 	return e, err
 }

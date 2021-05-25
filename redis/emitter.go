@@ -44,9 +44,8 @@ func (re *RedisEmitter) GetSerializer() async_events.Serializer {
 func (re *RedisEmitter) findAllActiveChannels(ev async_events.Event) []string {
 	routerChannels := re.findActiveRouterChannels(ev)
 	eventListeners, _ := re.findEventListenersChannels(ev)
-	callbackListeners := re.findCallbackChannels(ev)
 
-	return append(append(routerChannels, eventListeners...), callbackListeners...)
+	return append(routerChannels, eventListeners...)
 }
 
 func (re *RedisEmitter) findActiveRouterChannels(ev async_events.Event) []string {
@@ -74,14 +73,6 @@ func (re *RedisEmitter) findEventListenersChannels(ev async_events.Event) (chns 
 	chns, err = re.findActiveChannels(listenerName)
 
 	return
-}
-
-func (re *RedisEmitter) findCallbackChannels(ev async_events.Event) []string {
-	if len(ev.GetCallbackChannel()) == 0 {
-		return []string{}
-	}
-	chns, _ := re.findActiveChannels(ev.GetCallbackChannel())
-	return chns
 }
 
 func (re *RedisEmitter) findActiveChannels(name string) (channels []string, err error) {

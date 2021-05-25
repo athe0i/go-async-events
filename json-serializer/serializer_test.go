@@ -20,7 +20,6 @@ func TestJsonSerializer_Serialize(t *testing.T) {
 		},
 	}
 	e.SetName("test")
-	e.SetCallbackChannel("")
 
 	serializer := NewJsonSerializer()
 	serializer.(async_events.EventRegistry).RegisterEvent("test", test.NewBlankTestEvent)
@@ -31,7 +30,7 @@ func TestJsonSerializer_Serialize(t *testing.T) {
 		return
 	}
 
-	testJson := "{\"callback_channel\":\"\",\"name\":\"test\",\"payload\":{\"Number\":124,\"Text\":\"Test\",\"SubField\":{\"Field\":\"SubField\"}}}"
+	testJson := "{\"name\":\"test\",\"payload\":{\"Number\":124,\"Text\":\"Test\",\"SubField\":{\"Field\":\"SubField\"}}}"
 	if serialized != testJson {
 		t.Errorf("Serialization is not working correctly!")
 		return
@@ -48,7 +47,7 @@ func TestJsonSerializer_Serialize(t *testing.T) {
 		return
 	}
 
-	testErrorJson := "{\"callback_channel\":\"\",\"name\":\"non-existing\",\"payload\":{\"Number\":124,\"Text\":\"Test\",\"SubField\":{\"Field\":\"SubField\"}}}"
+	testErrorJson := "{\"name\":\"non-existing\",\"payload\":{\"Number\":124,\"Text\":\"Test\",\"SubField\":{\"Field\":\"SubField\"}}}"
 	_, err = serializer.Deserialize(testErrorJson)
 
 	if errors.As(err, &async_events.NoEventRegistered{}) == false {
